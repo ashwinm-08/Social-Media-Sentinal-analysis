@@ -11,7 +11,7 @@ import { ReviewQueuePage } from './pages/ReviewQueuePage';
 import { BatchAnalysisPage } from './pages/BatchAnalysisPage';
 import { AboutPage } from './pages/AboutPage';
 import { LoginPage } from './pages/LoginPage';
-import { ProtectedRoute } from './components/ProtectedRoute';
+
 
 export function App() {
   return (
@@ -28,39 +28,12 @@ export function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/login" element={<LoginPage />} />
 
-              {/* Protected Operational & Dashboard Pages */}
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <DashboardPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/alerts"
-                element={
-                  <ProtectedRoute>
-                    <AlertsPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/review-queue"
-                element={
-                  <ProtectedRoute>
-                    <ReviewQueuePage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/batch"
-                element={
-                  <ProtectedRoute>
-                    <BatchAnalysisPage />
-                  </ProtectedRoute>
-                }
-              />
+              {/* All operational views accessible */}
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/alerts" element={<AlertsPage />} />
+              <Route path="/review-queue" element={<ReviewQueuePage />} />
+              <Route path="/batch" element={<BatchAnalysisPage />} />
+
 
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

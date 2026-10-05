@@ -70,16 +70,44 @@ export const BatchAnalysisPage: React.FC = () => {
     document.body.removeChild(link);
   };
 
+  const loadSampleCSV = () => {
+    const sampleContent = `text,brand,platform
+"Absolutely love the build quality of NovaTech, fast shipping!",NovaTech,twitter
+"Horrible battery life and overheats within 10 minutes. Terrible!",NovaTech,reddit
+"Average performance, packaging was slightly bent but product works.",NovaTech,reviews
+"Customer service representative was extremely rude and unhelpful.",NovaTech,twitter
+"The sound output and craftsmanship exceeded all expectations. 10/10!",NovaTech,youtube
+"Oh great, package delayed by two weeks again. Outstanding service /s",NovaTech,reddit
+"Worth every dollar! Durable finish and sleek packaging.",NovaTech,reviews
+"Defective charging port, waste of money. Requesting a refund.",NovaTech,twitter
+`;
+    const blob = new Blob([sampleContent], { type: 'text/csv' });
+    const sampleFile = new File([blob], 'sample_social_posts.csv', { type: 'text/csv' });
+    setFile(sampleFile);
+    setError(null);
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header */}
-      <div className="pb-6 border-b border-slate-200 dark:border-slate-800">
-        <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-          Batch CSV Analysis
-        </h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Upload large batches of customer posts (CSV up to 2MB). Validates input columns, classifies sentiment and aspects in seconds, and exports enriched CSVs.
-        </p>
+      <div className="pb-6 border-b border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Batch CSV Analysis
+          </h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            Upload social media posts in bulk. Validates structure, performs multi-aspect sentiment decomposition, and exports results.
+          </p>
+        </div>
+
+        {/* Quick Sample Button */}
+        <button
+          onClick={loadSampleCSV}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-blue-700 bg-blue-50 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 transition shadow-sm"
+        >
+          <Sparkles className="h-4 w-4" />
+          Load Pre-built Sample CSV (8 posts)
+        </button>
       </div>
 
       {/* Upload Zone */}
@@ -137,6 +165,7 @@ export const BatchAnalysisPage: React.FC = () => {
           </button>
         </div>
       </div>
+
 
       {/* Results Table & Export */}
       {results && results.length > 0 && (
