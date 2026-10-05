@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: sentiment_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: sentiment_user
+      POSTGRES_PASSWORD: sentiment_secret_password
+      POSTGRES_DB: sentiment_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sentiment_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://sentiment_user:sentiment_secret_password@postgres:5432/sentiment_db
+      - SECRET_KEY=supersecretkey_for_dev_change_in_production_jwt_token_key_12345
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=1440
+      - MODEL_PROVIDER=mock
+      - MODEL_DIR=/app/saved_models/sentiment_model
+      - ENVIRONMENT=production
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sentiment_frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

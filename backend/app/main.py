@@ -5,7 +5,7 @@ from slowapi.errors import RateLimitExceeded
 from app.core.config import settings
 from app.core.rate_limiter import limiter
 from app.core.database import Base, engine
-from app.api import predict
+from app.api import predict, auth, analytics, operations
 
 # Ensure tables are created if using SQLite
 Base.metadata.create_all(bind=engine)
@@ -31,6 +31,10 @@ app.add_middleware(
 )
 
 app.include_router(predict.router)
+app.include_router(auth.router)
+app.include_router(analytics.router)
+app.include_router(operations.router)
+
 
 @app.get("/api/health")
 def health_check():
